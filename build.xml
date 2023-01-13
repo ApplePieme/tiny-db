@@ -1,0 +1,83 @@
+<project>
+	<property name="jar.dist.name" value="tiny-db"/>
+	
+    <property name="src.dir" location="src/main/java"/>
+	<property name="conf.dir" value="conf"/>
+	<property name="res.dir" value="res"/>
+	<property name="build.dir" location="build"/>
+	<property name="lib.dir" location="lib"/>
+	
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="build.jar.dir" value="${build.dir}"/>
+    <property name="build.lib.dir" value="${build.dir}/lib"/>
+    
+	<property name="dist.dir" location="dist"/>
+	<property name="dist.lib.dir" location="${dist.dir}/lib"/>
+	<property name="dist.conf.dir" location="${dist.dir}/conf"/>
+	
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+
+    <path id="classpath">
+        <fileset dir="${build.lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="init">
+    	<tstamp> <format property="time.today" pattern="yyyy-MM-dd"/> </tstamp>
+    	<property name="jar.name" value="${jar.dist.name}-${time.today}"/>
+    	
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${build.jar.dir}"/>
+        <mkdir dir="${build.lib.dir}"/>
+    	
+		<mkdir dir="${dist.dir}"/>
+		<mkdir dir="${dist.lib.dir}"/>
+		<mkdir dir="${dist.conf.dir}"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <copy todir="${build.lib.dir}" overwrite="false" flatten="true">
+            <fileset dir="lib">
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+        <javac includeantruntime="false" srcdir="${src.dir}" destdir="${build.classes.dir}" debug="true" debuglevel="lines,vars,source" classpathref="classpath"/>
+    </target>
+    
+    <target name="jar" depends="compile">
+        <jar destfile="${build.jar.dir}/${jar.name}.jar">
+            <manifest>
+                <attribute name="Class-Path" value="lib/slf4j-api-1.7.36.jar lib/slf4j-reload4j-1.7.36.jar lib/log4j-1.2.17.jar lib/config-1.3.1.jar"/>
+                <attribute name="Main-Class" value="com.yanchuanl.tinydb.Main"/>
+            </manifest>
+            <fileset dir="${build.classes.dir}" />
+        </jar>
+    </target>
+
+    <target name="assemble" depends="jar">
+    	<copy file="${build.jar.dir}/${jar.name}.jar" tofile="${dist.dir}/${jar.dist.name}.jar" overwrite="true"/>
+
+        <copy todir="${dist.lib.dir}" overwrite="false">
+            <fileset dir="${build.lib.dir}">
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+		
+		<copy todir="${dist.dir}">
+			<fileset dir="${res.dir}">
+            	<include name="run.sh"/>
+            	<include name="kill.sh"/>
+			</fileset>
+		</copy>
+		
+		<copy todir="${dist.conf.dir}">
+			<fileset dir="${conf.dir}">
+            	<include name="**"/>
+			</fileset>
+		</copy>
+	</target>
+</project>
