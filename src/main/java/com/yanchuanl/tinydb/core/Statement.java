@@ -1,60 +1,58 @@
 package com.yanchuanl.tinydb.core;
 
-import static com.yanchuanl.tinydb.common.Constants.*;
+import com.yanchuanl.tinydb.common.Constants;
+import com.yanchuanl.tinydb.common.ExecuteResult;
 
 public class Statement {
     static final Row row = new Row();
     
-    public static void execute(String command) {
+    public static ExecuteResult execute(String command) {
         switch (command.substring(0, 6)) {
             case "insert":
-                executeInsert(command.substring(6));
-                break;
+                return executeInsert(command.substring(6));
             case "select":
-                executeSelect();
-                break;
+                return executeSelect();
             default:
-                System.out.printf("unrecognized keyword at start of '%s'%n", command);
-                break;
+                return ExecuteResult.UNRECOGNIZED_STATEMENT;
         }
     }
     
-    private static void executeInsert(String command) {
-        if (Table.rowCount >= TABLE_MAX_ROWS) {
-            System.out.println("error: table full");
-            return;
+    private static ExecuteResult executeInsert(String command) {
+        if (Table.rowCount >= Constants.TABLE_MAX_ROWS) {
+            return ExecuteResult.TABLE_FULL;
         }
         
         String[] columns = command.trim().split("\\s+");
         if (columns.length != 3) {
-            System.out.println("syntax error, could not parse statement");
-            return;
+            return ExecuteResult.SYNTAX_ERROR;
         }
         
-        row.id = Integer.parseInt(columns[0]);
+        try {
+            row.id = Integer.parseInt(columns[0]);
+            if (row.id < 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            return ExecuteResult.INVALID_ID;
+        }
         row.username = columns[1];
         row.email = columns[2];
+        if (row.username.length() > Constants.USERNAME_SIZE || row.email.length() > Constants.EMAIL_SIZE) {
+            return ExecuteResult.STRING_TOO_LONG;
+        }
         
-        Table.createIfAbsent(Table.rowCount).serializeRow(Table.rowCount % PAGE_SIZE);
+        Table.createIfAbsent(Table.rowCount).serializeRow(Table.rowCount % Constants.PAGE_SIZE);
         ++Table.rowCount;
 
-        System.out.println("executed");
+        return ExecuteResult.EXECUTE_SUCCESS;
     }
     
-    private static void executeSelect() {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < 63; i++) {
-            builder.append("-");
-        }
-        builder.append("\n- id");
-        for (int i = 0; i < 20; i++) {
-            builder.append(" ");
-        }
-        
-        
+    private static ExecuteResult executeSelect() {
         for (int i = 0; i < Table.rowCount; i++) {
-            Table.createIfAbsent(i).deserializeRow(i % PAGE_SIZE);
+            Table.createIfAbsent(i).deserializeRow(i % Constants.PAGE_SIZE);
             System.out.printf("[%d, %s, %s]\n", row.id, row.username, row.email);
         }
+        
+        return ExecuteResult.EXECUTE_SUCCESS;
     }
 }

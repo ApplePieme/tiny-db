@@ -1,14 +1,15 @@
 package com.yanchuanl.tinydb.core;
 
+import com.yanchuanl.tinydb.common.ExecuteResult;
+
 public class MetaCommand {
-    public static void execute(String command) {
+    public static ExecuteResult execute(String command) {
         switch (command) {
             case ".exit":
                 System.exit(0);
-                break;
+                return ExecuteResult.META_COMMAND_SUCCESS;
             default:
-                System.out.printf("unrecognized command '%s'%n", command);
-                break;
+                return ExecuteResult.META_COMMAND_UNRECOGNIZED_COMMAND;
         }
     }
 }

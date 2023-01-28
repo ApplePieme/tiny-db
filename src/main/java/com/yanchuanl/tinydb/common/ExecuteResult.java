@@ -1,0 +1,12 @@
+package com.yanchuanl.tinydb.common;
+
+public enum ExecuteResult {
+    META_COMMAND_SUCCESS,
+    META_COMMAND_UNRECOGNIZED_COMMAND,
+    EXECUTE_SUCCESS,
+    UNRECOGNIZED_STATEMENT,
+    SYNTAX_ERROR,
+    TABLE_FULL,
+    STRING_TOO_LONG,
+    INVALID_ID
+}

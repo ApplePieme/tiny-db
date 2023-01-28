@@ -1,16 +1,16 @@
 package com.yanchuanl.tinydb.core;
 
-import static com.yanchuanl.tinydb.common.Constants.*;
+import com.yanchuanl.tinydb.common.Constants;
 
 class Table {
     static int rowCount;
-    static final Page[] pages = new Page[TABLE_MAX_PAGES];
+    static final Page[] pages = new Page[Constants.TABLE_MAX_PAGES];
     
     static Page createIfAbsent(int rowNumber) {
-        Page page = pages[rowNumber / ROWS_PER_PAGE];
+        Page page = pages[rowNumber / Constants.ROWS_PER_PAGE];
         if (page == null) {
             page = new Page();
-            pages[rowNumber / ROWS_PER_PAGE] = page;
+            pages[rowNumber / Constants.ROWS_PER_PAGE] = page;
         }
         return page;
     }
