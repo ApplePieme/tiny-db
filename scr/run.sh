@@ -1,10 +1,10 @@
 #!/bin/bash
 
 scriptpath=`realpath -e $0` 
-echo "ScriptPath=${scriptpath}"
+echo "script path: ${scriptpath}"
 
 workspace=`dirname ${scriptpath}`
-echo "WorkDir=${workspace}"
+echo "work dir: ${workspace}"
 
 cd $workspace || exit
 

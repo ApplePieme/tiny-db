@@ -1,5 +1,6 @@
 package com.yanchuanl.tinydb.core;
 
+import com.yanchuanl.tinydb.common.Configs;
 import com.yanchuanl.tinydb.common.ExecuteResult;
 
 import java.util.Scanner;
@@ -12,6 +13,8 @@ public class Bootstrap {
     }
     
     public static void start() {
+        Pager.openFile(Configs.getDbFilename());
+        
         while (true) {
             System.out.print("db > ");
             String command = sc.nextLine();

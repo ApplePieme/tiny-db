@@ -6,6 +6,7 @@ public class MetaCommand {
     public static ExecuteResult execute(String command) {
         switch (command) {
             case ".exit":
+                Pager.flush();
                 System.exit(0);
                 return ExecuteResult.META_COMMAND_SUCCESS;
             default:

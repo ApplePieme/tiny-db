@@ -41,7 +41,7 @@ public class Statement {
             return ExecuteResult.STRING_TOO_LONG;
         }
         
-        Table.createIfAbsent(Table.rowCount).serializeRow(Table.rowCount % Constants.PAGE_SIZE);
+        Table.createPageIfAbsent(Table.rowCount).serializeRow(Table.rowCount % Constants.ROWS_PER_PAGE);
         ++Table.rowCount;
 
         return ExecuteResult.EXECUTE_SUCCESS;
@@ -49,7 +49,7 @@ public class Statement {
     
     private static ExecuteResult executeSelect() {
         for (int i = 0; i < Table.rowCount; i++) {
-            Table.createIfAbsent(i).deserializeRow(i % Constants.PAGE_SIZE);
+            Table.createPageIfAbsent(i).deserializeRow(i % Constants.ROWS_PER_PAGE);
             System.out.printf("[%d, %s, %s]\n", row.id, row.username, row.email);
         }
         
