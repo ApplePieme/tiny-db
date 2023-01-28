@@ -6,7 +6,7 @@ echo "ScriptPath=${scriptpath}"
 workspace=`dirname ${scriptpath}`
 echo "WorkDir=${workspace}"
 
-cd $workspace
+cd $workspace || exit
 
 jarname=tiny-db.jar
 jarfile=${workspace}/${jarname}
