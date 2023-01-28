@@ -3,7 +3,7 @@
 	
     <property name="src.dir" location="src/main/java"/>
 	<property name="conf.dir" value="conf"/>
-	<property name="res.dir" value="res"/>
+	<property name="scr.dir" value="scr"/>
 	<property name="build.dir" location="build"/>
 	<property name="lib.dir" location="lib"/>
 	
@@ -68,7 +68,7 @@
         </copy>
 		
 		<copy todir="${dist.dir}">
-			<fileset dir="${res.dir}">
+			<fileset dir="${scr.dir}">
             	<include name="run.sh"/>
             	<include name="kill.sh"/>
 			</fileset>
