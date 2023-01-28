@@ -35,7 +35,7 @@ public class Statement {
         row.username = columns[1];
         row.email = columns[2];
         
-        Table.getPage(Table.rowCount).serializeRow(Table.rowCount % PAGE_SIZE);
+        Table.createIfAbsent(Table.rowCount).serializeRow(Table.rowCount % PAGE_SIZE);
         ++Table.rowCount;
 
         System.out.println("executed");
@@ -53,7 +53,7 @@ public class Statement {
         
         
         for (int i = 0; i < Table.rowCount; i++) {
-            Table.getPage(i).deserializeRow(i % PAGE_SIZE);
+            Table.createIfAbsent(i).deserializeRow(i % PAGE_SIZE);
             System.out.printf("[%d, %s, %s]\n", row.id, row.username, row.email);
         }
     }

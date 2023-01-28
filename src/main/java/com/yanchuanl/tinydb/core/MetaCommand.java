@@ -1,7 +1,7 @@
 package com.yanchuanl.tinydb.core;
 
-public class MetaCommandHandler {
-    public static void handle(String command) {
+public class MetaCommand {
+    public static void execute(String command) {
         switch (command) {
             case ".exit":
                 System.exit(0);

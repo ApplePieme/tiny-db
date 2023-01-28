@@ -15,7 +15,7 @@ public class Bootstrap {
             String command = sc.nextLine();
             
             if (command.startsWith(".")) {
-                MetaCommandHandler.handle(command);
+                MetaCommand.execute(command);
                 continue;
             }
 
